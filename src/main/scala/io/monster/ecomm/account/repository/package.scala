@@ -1,17 +1,9 @@
 package io.monster.ecomm.account
 
-import cats.effect.{Blocker, Resource}
-import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
-import doobie.ExecutionContexts
-import doobie.h2.H2Transactor
-import doobie.hikari.HikariTransactor
-import doobie.util.transactor.Transactor
-import io.monster.ecomm.account.Main.platform
 import io.monster.ecomm.account.configuration.Configuration.DbConfig
-import zio.{Has, RIO, Task, URLayer, ZLayer}
 import io.monster.ecomm.account.model.{Account, User}
-import zio._
 import zio.interop.catz._
+import zio.{Has, RIO}
 
 package object repository {
   type UserRepository = Has[Repository.UserService]

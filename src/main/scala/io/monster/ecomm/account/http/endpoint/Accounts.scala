@@ -1,21 +1,16 @@
 package io.monster.ecomm.account.http.endpoint
 
-import io.circe.{Decoder, Encoder}
-import io.monster.ecomm.account.model.Account
-import org.http4s.circe.{jsonEncoderOf, jsonOf}
-import org.http4s.{EntityDecoder, EntityEncoder, HttpRoutes}
-import org.http4s.dsl.Http4sDsl
-import zio.{RIO, Task}
-import zio.interop.catz._
 import io.circe.generic.auto._
-import io.monster.ecomm.account
+import io.circe.{Decoder, Encoder}
 import io.monster.ecomm.account.environment.Environments.AppEnvironment
-import io.monster.ecomm.account.repository.UserRepositoryImpl
+import io.monster.ecomm.account.model.Account
 import io.monster.ecomm.account.repository._
-import org.http4s.Method.UPDATE
-import org.http4s.circe.CirceEntityCodec.circeEntityEncoder
-import org.http4s.circe._
+import org.http4s.circe.{jsonEncoderOf, jsonOf}
+import org.http4s.dsl.Http4sDsl
 import org.http4s.server.Router
+import org.http4s.{EntityDecoder, EntityEncoder, HttpRoutes}
+import zio.RIO
+import zio.interop.catz._
 
 object Accounts {
   type AccountTask[A] = RIO[AppEnvironment, A]

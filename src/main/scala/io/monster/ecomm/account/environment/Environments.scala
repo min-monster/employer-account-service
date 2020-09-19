@@ -14,6 +14,6 @@ object Environments {
   val dbTransactorLayer: ULayer[DbTransactor] = Configuration.live >>> DbTransactor.db
   val usersRepositoryLayer: ULayer[UserRepository] = dbTransactorLayer >>> Repository.live
   val dbTransactorWithConsole: ULayer[DbTransactor with Console] = dbTransactorLayer ++ Console.live
-  val accountRepositoryLayer: ULayer[AccountRepository] =  dbTransactorWithConsole >>> Repository.accountLive
+  val accountRepositoryLayer: ULayer[AccountRepository] = dbTransactorWithConsole >>> Repository.accountLive
   val appEnvironmentLayer: ULayer[AppEnvironment] = httpServerEnvironmentLayer ++ usersRepositoryLayer ++ accountRepositoryLayer
 }

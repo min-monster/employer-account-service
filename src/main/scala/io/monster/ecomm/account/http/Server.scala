@@ -39,7 +39,7 @@ object Server {
     val accountRoutes = Accounts.routes
     val routes = userRoutes <+> accountRoutes
 
-    Router[ServerRIO](basePath -> middleware(routes)).orNotFound
+    Router[ServerRIO](basePath -> routes).orNotFound
   }
 
   private val middleware: HttpRoutes[ServerRIO] => HttpRoutes[ServerRIO] = {

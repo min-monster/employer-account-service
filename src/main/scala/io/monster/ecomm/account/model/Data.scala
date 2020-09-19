@@ -1,7 +1,7 @@
 package io.monster.ecomm.account.model
 
-import io.getquill.{idiom => _, _}
 import doobie.quill.DoobieContext
+import io.getquill.{idiom => _, _}
 
 final case class User(id: Long, name: String)
 
@@ -19,9 +19,11 @@ final case class Account(
                           parentAccountId: Option[String],
                           address: Option[String]
                         )
+
 object schema {
 
   val dc = new DoobieContext.MySQL(Literal)
+
   import dc._
 
   val account = quote {

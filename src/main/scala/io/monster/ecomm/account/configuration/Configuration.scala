@@ -22,6 +22,6 @@ object Configuration {
   val test: ULayer[Configuration] = ZLayer.fromEffectMany(
     Task.effectTotal(
       Has(HttpServerConfig("localhost", 8080, "")) ++
-      Has(DbConfig("org.h2.Driver", "jdbc:h2:~/test1;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:schema.sql';", "", "")))
+        Has(DbConfig("org.h2.Driver", "jdbc:h2:~/test1;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:schema.sql';", "", "")))
   )
 }

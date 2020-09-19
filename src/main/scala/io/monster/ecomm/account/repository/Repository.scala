@@ -1,9 +1,8 @@
 package io.monster.ecomm.account.repository
 
-import zio.console.Console
-
 import io.monster.ecomm.account.model.{Account, User}
-import zio.{Has, Task, URLayer, ZLayer}
+import zio.console.Console
+import zio.{Task, URLayer, ZLayer}
 
 object Repository {
 

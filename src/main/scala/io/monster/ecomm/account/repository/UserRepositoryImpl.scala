@@ -3,7 +3,6 @@ package io.monster.ecomm.account.repository
 import doobie.hikari.HikariTransactor
 import doobie.implicits._
 import io.getquill.{idiom => _}
-import doobie.{LogHandler, Query0, Update0}
 import io.monster.ecomm.account.model.schema._
 import io.monster.ecomm.account.model.{User, UserNotFound}
 import io.monster.ecomm.account.repository.Repository.UserService
@@ -56,6 +55,7 @@ final case class UserRepositoryImpl(xa: HikariTransactor[Task]) extends UserServ
 }
 
 object SQL {
+
   import dc._
 
   //sql"""SELECT  id, name FROM USER""".queryWithLogHandler[User](LogHandler.jdkLogHandler)
