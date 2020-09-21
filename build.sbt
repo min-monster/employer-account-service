@@ -14,6 +14,9 @@ libraryDependencies ++= Seq(
   "org.http4s" %% "http4s-circe" % "0.21.1",
   "org.http4s" %% "http4s-dsl" % "0.21.1",
 
+  "org.http4s" %% "rho-swagger" % "0.21.0-RC1",
+  "org.http4s" %% "rho-swagger-ui" % "0.21.0-RC1",
+
   "dev.zio" %% "zio-interop-cats" % "2.0.0.0-RC12",
   "dev.zio" %% "zio" % "1.0.0-RC18-2",
   "dev.zio" %% "zio-test" % "1.0.0-RC18-2" % "test",
