@@ -16,15 +16,15 @@ import io.monster.ecomm.account.http.endpoint.Users.UserTask
 import io.monster.ecomm.account.model.UserNotFound
 import org.http4s.circe.{jsonEncoderOf, jsonOf}
 
-object HelloServiceSpec extends DefaultRunnableSpec {
-  override def spec = suite("routes suite")(
-    testM("root request returns hello!") {
-     val io =for {
-        result <- HelloService.service.run(Request[Task](Method.GET, uri"/")).value
-        _ <- ZIO.effectTotal(println(result))
-       body <- result.orNull.body.compile.toVector.map(x => x.map(_.toChar).mkString(""))
-      } yield body
-      assertM(io)(equalTo("hello!"))
-    }
-  ) @@ sequential
-}
+// object HelloServiceSpec extends DefaultRunnableSpec {
+//   override def spec = suite("routes suite")(
+//     testM("root request returns hello!") {
+//      val io =for {
+//         result <- HelloService.service.run(Request[Task](Method.GET, uri"/")).value
+//         _ <- ZIO.effectTotal(println(result))
+//        body <- result.orNull.body.compile.toVector.map(x => x.map(_.toChar).mkString(""))
+//       } yield body
+//       assertM(io)(equalTo("hello!"))
+//     }
+//   ) @@ sequential
+// }

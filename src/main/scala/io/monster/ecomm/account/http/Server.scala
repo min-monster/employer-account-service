@@ -14,6 +14,8 @@ import org.http4s.server.middleware.{AutoSlash, GZip}
 import org.http4s.{HttpRoutes, Request, Response}
 import zio.interop.catz._
 import zio.{RIO, ZIO}
+import org.http4s.rho.RhoMiddleware
+import org.http4s.rho.swagger.SwaggerSupport
 
 object Server {
   type ServerRIO[A] = RIO[AppEnvironment, A]
@@ -37,7 +39,12 @@ object Server {
   def createRoutes(basePath: String): ServerRoutes = {
     val userRoutes = Users.routes
     val accountRoutes = Accounts.routes
-    val routes = userRoutes <+> accountRoutes
+
+    import org.http4s.rho.swagger.syntax.io._
+
+    val swaggerMiddleWare: RhoMiddleware[ServerRIO]  = SwaggerSupport.apply[ServerRIO].createRhoMiddleware()
+    val helloRoutes = HelloService.api.toRoutes(swaggerMiddleWare);
+    val routes = userRoutes <+> accountRoutes <+> helloRoutes
 
     Router[ServerRIO](basePath -> routes).orNotFound
   }
