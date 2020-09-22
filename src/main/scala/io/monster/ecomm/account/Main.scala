@@ -10,8 +10,8 @@ object Main extends App {
     val program = for {
       _ <- Server.runServer
     } yield ()
-    program.provideLayer(appEnvironmentLayer).foldM(_ => IO.succeed(1), _ => IO.succeed(0))
+    program
+      .provideLayer(appEnvironmentLayer)
+      .foldM(_ => IO.succeed(1), _ => IO.succeed(0))
   }
 }
-
-

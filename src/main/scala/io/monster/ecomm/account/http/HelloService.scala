@@ -6,8 +6,8 @@ import org.http4s.dsl.Http4sDsl
 import org.http4s.rho.RhoRoutes
 import org.http4s.server.Router
 import zio.interop.catz._
-import zio.{IO, RIO}
-import org.http4s.rho.swagger.{SwaggerSupport, SwaggerSyntax}
+import zio.{ IO, RIO }
+import org.http4s.rho.swagger.{ SwaggerSupport, SwaggerSyntax }
 import org.http4s.rho.RhoMiddleware
 
 object HelloService {
@@ -24,19 +24,22 @@ object HelloService {
     val hello = "hello" @@ GET / "hello"
 
     "Get int form path var and also request params" **
-    hello / "somePath" / pathVar[Int]("someInt", "parameter description") +? paramD[String]("name", "parameter description") |>> {
-      (someInt: Int, name: String) => Ok("result")
+      hello / "somePath" / pathVar[Int]("someInt", "parameter description") +? paramD[String](
+      "name",
+      "parameter description"
+    ) |>> { (someInt: Int, name: String) =>
+      Ok("result")
     }
 
     "Some test endpoint " **
-    hello / "somePath2"  |>> {
-      () => Ok("result")
+      hello / "somePath2" |>> { () =>
+      Ok("result")
     }
 
     "Tagging a API" **
-      List("post", "stuff")  @@
-    hello |>> {
-      () => Ok("world")
+      List("post", "stuff") @@
+        hello |>> { () =>
+      Ok("world")
     }
   }
 }

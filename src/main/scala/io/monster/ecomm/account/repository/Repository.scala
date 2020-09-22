@@ -1,8 +1,8 @@
 package io.monster.ecomm.account.repository
 
-import io.monster.ecomm.account.model.{Account, User}
+import io.monster.ecomm.account.model.{ Account, User }
 import zio.console.Console
-import zio.{Task, URLayer, ZLayer}
+import zio.{ Task, URLayer, ZLayer }
 
 object Repository {
 
@@ -31,9 +31,7 @@ object Repository {
   }
 
   val live: URLayer[DbTransactor, UserRepository] =
-  /*ZLayer.fromService {
-      resource =>  UserRepositoryImpl(resource.xa)
-    }*/
+    /* ZLayer.fromService { resource => UserRepositoryImpl(resource.xa) } */
     ZLayer.fromFunction { resource =>
       UserRepositoryImpl(resource.get.xa)
     }

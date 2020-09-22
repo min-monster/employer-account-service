@@ -1,11 +1,11 @@
 package io.monster.ecomm.account.repository
 
 import cats.effect.Blocker
-import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
+import com.zaxxer.hikari.{ HikariConfig, HikariDataSource }
 import doobie.hikari.HikariTransactor
 import io.monster.ecomm.account.Main.platform
-import zio.interop.catz.{taskConcurrentInstance, zioContextShift}
-import zio.{Task, URLayer, ZLayer}
+import zio.interop.catz.{ taskConcurrentInstance, zioContextShift }
+import zio.{ Task, URLayer, ZLayer }
 
 object DbTransactor {
 
@@ -21,7 +21,11 @@ object DbTransactor {
         config.setUsername(db.user)
         config.setPassword(db.password)
         config.setMaximumPoolSize(5)
-        HikariTransactor.apply[Task](new HikariDataSource(config), platform.executor.asEC, Blocker.liftExecutionContext(platform.executor.asEC))
+        HikariTransactor.apply[Task](
+          new HikariDataSource(config),
+          platform.executor.asEC,
+          Blocker.liftExecutionContext(platform.executor.asEC)
+        )
       }
     }
   }
