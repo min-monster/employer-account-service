@@ -19,7 +19,7 @@ object Accounts {
 
   implicit def circeJsonDecoder[A](implicit decoder: Decoder[A]): EntityDecoder[AccountTask, A] =
     jsonOf[AccountTask, A]
-
+// RIO[AccountRepository, List[Account]]
   implicit def circeJsonEncoder[A](implicit decoder: Encoder[A]): EntityEncoder[AccountTask, A] =
     jsonEncoderOf[AccountTask, A]
 
