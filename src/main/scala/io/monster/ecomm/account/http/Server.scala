@@ -18,6 +18,7 @@ import org.http4s.rho.RhoMiddleware
 import org.http4s.rho.swagger._
 import org.http4s.rho.swagger.models.Info
 import io.monster.ecomm.account.http.endpoint.UsersNew
+import org.http4s.server.middleware.CORS
 
 object Server {
   type ServerRIO[A] = RIO[AppEnvironment, A]
@@ -61,12 +62,14 @@ object Server {
     val helloRoutes = HelloService.api.toRoutes(swaggerMiddleWare);
     val usersNewRoutes = UsersNew.api.toRoutes(swaggerMiddleWare);
 
-    val newRoutes = (HelloService.api and UsersNew.api).toRoutes(swaggerMiddleWare);
+    val newRoutes = HelloService.api.and(UsersNew.api).toRoutes(swaggerMiddleWare);
 
-    val routes = userRoutes <+> accountRoutes  <+> newRoutes
+    val routes = userRoutes <+> accountRoutes <+> newRoutes
     // val routes = userRoutes <+> accountRoutes  <+> usersNewRoutes <+> helloRoutes
 
-    Router[ServerRIO](basePath -> routes).orNotFound
+    val corsService = CORS(routes)
+
+    Router[ServerRIO](basePath -> corsService).orNotFound
   }
 
   private val middleware: HttpRoutes[ServerRIO] => HttpRoutes[ServerRIO] = { http: HttpRoutes[ServerRIO] =>
