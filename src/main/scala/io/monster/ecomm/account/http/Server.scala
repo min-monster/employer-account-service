@@ -17,7 +17,7 @@ import zio.{ RIO, ZIO }
 import org.http4s.rho.RhoMiddleware
 import org.http4s.rho.swagger._
 import org.http4s.rho.swagger.models.Info
-import io.monster.ecomm.account.http.endpoint.UsersNew
+import io.monster.ecomm.account.http.endpoint.Users
 import org.http4s.server.middleware.CORS
 
 object Server {
@@ -43,7 +43,6 @@ object Server {
       .orDie
 
   def createRoutes(basePath: String): ServerRoutes = {
-    val userRoutes = Users.routes
     val accountRoutes = Accounts.routes
 
     import org.http4s.rho.swagger.syntax.io._
@@ -59,13 +58,10 @@ object Server {
           )
         )
       )
-    val helloRoutes = HelloService.api.toRoutes(swaggerMiddleWare);
-    val usersNewRoutes = UsersNew.api.toRoutes(swaggerMiddleWare);
 
-    val newRoutes = HelloService.api.and(UsersNew.api).toRoutes(swaggerMiddleWare);
+    val swaggerRoutes = HelloService.api.and(Users.api).toRoutes(swaggerMiddleWare);
 
-    val routes = userRoutes <+> accountRoutes <+> newRoutes
-    // val routes = userRoutes <+> accountRoutes  <+> usersNewRoutes <+> helloRoutes
+    val routes = accountRoutes <+> swaggerRoutes
 
     val corsService = CORS(routes)
 

@@ -8,14 +8,16 @@ import io.monster.ecomm.account.repository._
 import org.http4s.circe.{ jsonEncoderOf, jsonOf }
 import org.http4s.dsl.Http4sDsl
 import org.http4s.server.Router
-import org.http4s.{ EntityDecoder, EntityEncoder, HttpRoutes }
+// import org.http4s.{ EntityDecoder, EntityEncoder, HttpRoutes }
 import zio.RIO
 import zio.interop.catz._
+import org.http4s.rho.RhoRoutes
+import org.http4s.rho.swagger.SwaggerSupport
+import org.http4s.EntityDecoder
+import org.http4s.EntityEncoder
 
 object Users {
   type UserTask[A] = RIO[AppEnvironment, A]
-
-  private val prefixPath = "/users"
 
   implicit def circeJsonDecoder[A](implicit decoder: Decoder[A]): EntityDecoder[UserTask, A] =
     jsonOf[UserTask, A]
@@ -27,22 +29,39 @@ object Users {
 
   import dsl._
 
-  val userRoutes =
-    HttpRoutes.of[UserTask] {
-      case GET -> Root                        =>
-        Ok(getAll)
-      case GET -> Root / IntVar(id)           =>
-        Ok(get(id))
-      case request @ POST -> Root             =>
-        request.decode[User] { user =>
-          Created(create(user))
-        }
-      case DELETE -> Root / IntVar(id)        => Ok(delete(id))
-      case request @ PUT -> Root / IntVar(id) =>
-        request.decode[User] { user =>
-          Ok(update(user))
-        }
+  val swaggerSupport = SwaggerSupport.apply[UserTask]
+  import swaggerSupport._
+
+  private val prefixPath = "/users"
+
+  val api = new RhoRoutes[UserTask] {
+    val user = "users" @@ GET / prefixPath
+
+    "Get all users" **
+      List("WIP", "dev") @@
+        user |>> { () =>
+      getAll.foldM(err => NotFound(), users => Ok(users))
     }
 
-  val routes: HttpRoutes[UserTask] = Router(prefixPath -> userRoutes)
+    "Find user with user id" **
+      user / pathVar[Int]("id", "user Id") |>> { (userId: Int) =>
+      get(userId).foldM(err => NotFound(), user => Ok(user))
+    }
+
+    "Delete user with user id" **
+      DELETE / prefixPath / pathVar[Int]("id", "user Id") |>> { (userId: Int) =>
+      delete(userId).foldM(err => NotFound(), user => Ok(user))
+    }
+
+    "Create a new user" **
+      POST / prefixPath ^ EntityDecoder[UserTask, User] |>> { (body: User) =>
+      create(body).foldM(err => InternalServerError(), _ => Created(body))
+    }
+
+    "Update user with user id" **
+      PUT / prefixPath / pathVar[Int]("id", "user Id") ^ EntityDecoder[UserTask, User] |>> {
+      (userId: Int, body: User) =>
+        update(body).foldM(err => NotFound(), user => Ok(user))
+    }
+  }
 }
